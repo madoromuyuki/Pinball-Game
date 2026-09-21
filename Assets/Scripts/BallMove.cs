@@ -1,32 +1,38 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+using UnityEngine;
+using UnityEngine.InputSystem;
+
 public class BallMove : MonoBehaviour
 {
-
-    //reference to the ball's rigid body
+    // Reference to the ball's rigid body
     Rigidbody2D myBody;
-    //reference to input we'll be listening for
-    InputAction jump;
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    // Reference to horizontal movement input
+    InputAction move;
+
+    // Horizontal movement speed
+    public float moveSpeed = 8f;
+
     void Start()
     {
-        //setting the rigidbody and input vars
+        // Get the Rigidbody2D attached to the ball
         myBody = GetComponent<Rigidbody2D>();
-        jump = InputSystem.actions.FindAction("Jump");
-        //myBody.AddForceY(500f);
-        //myBody.AddForce(new Vector2(200f, 500f));
+
+        // Get the Move action from the Input System
+        move = InputSystem.actions.FindAction("Move");
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        //if any input assigned to the "jump" action is pressed
-        if (jump.IsPressed())
-        {
-            //add an upwards force to the ball
-            myBody.AddForceY(500f);
-        }
+        // Read the Move input as a Vector2
+        Vector2 moveInput = move.ReadValue<Vector2>();
+
+        // Control horizontal velocity while keeping vertical physics unchanged
+        myBody.linearVelocity = new Vector2(
+            moveInput.x * moveSpeed,
+            myBody.linearVelocity.y
+        );
     }
 }
