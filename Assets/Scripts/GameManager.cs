@@ -11,6 +11,16 @@ public class GameManager : MonoBehaviour
     public Text scoreText;
     public Text ballsText;
     public Button startButton;
+    public AudioClip clickSound;
+    public AudioClip pluckSound;
+    public AudioClip errorSound;
+    public AudioClip toggleSound;
+    public float clickVolume = 1f;
+    public float pluckVolume = 1f;
+    public float errorVolume = 1f;
+    public float toggleVolume = 1f;
+
+    AudioSource myAudio;
 
     int score = 0;
     int ballsDropped = 0;
@@ -20,6 +30,10 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        myAudio = gameObject.AddComponent<AudioSource>();
+        myAudio.playOnAwake = false;
+        myAudio.spatialBlend = 0f;
+
         if (background == null || background.sprite == null ||
             scoreText == null || ballsText == null || startButton == null)
         {
@@ -57,6 +71,7 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
+        PlaySound(clickSound, clickVolume);
         score = 0;
         ballsDropped = 0;
         ballsFinished = 0;
@@ -117,6 +132,14 @@ public class GameManager : MonoBehaviour
         {
             gameStarted = false;
             startButton.gameObject.SetActive(true);
+        }
+    }
+
+    public void PlaySound(AudioClip sound, float volume)
+    {
+        if (sound != null)
+        {
+            myAudio.PlayOneShot(sound, Mathf.Clamp01(volume));
         }
     }
 

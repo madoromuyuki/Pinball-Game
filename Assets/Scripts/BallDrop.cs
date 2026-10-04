@@ -14,12 +14,17 @@ public class BallDrop : MonoBehaviour
 
         if (collision.gameObject == gameManager.floor.gameObject)
         {
+            gameManager.PlaySound(gameManager.toggleSound, gameManager.toggleVolume);
             FinishBall(true);
         }
-        else if (collision.gameObject.GetComponent<RotateClockwise>() != null ||
-                 collision.gameObject.GetComponent<MoveSideToSide>() != null)
+        else if (collision.gameObject.GetComponent<MoveSideToSide>() != null)
         {
+            gameManager.PlaySound(gameManager.errorSound, gameManager.errorVolume);
             FinishBall(false);
+        }
+        else if (collision.gameObject.GetComponent<RotateClockwise>() != null)
+        {
+            gameManager.PlaySound(gameManager.pluckSound, gameManager.pluckVolume);
         }
     }
 
